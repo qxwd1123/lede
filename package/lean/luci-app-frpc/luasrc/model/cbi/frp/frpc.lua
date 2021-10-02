@@ -2,12 +2,12 @@ local o=require"luci.dispatcher"
 local e=require("luci.model.ipkg")
 local s=require"nixio.fs"
 local e=luci.model.uci.cursor()
-local i="frp"
+local i="frpc"
 local a,t,e
 local n={}
-a=Map(i,translate("Frp Setting"), translate("Frp is a fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet."))
-a:section(SimpleSection).template="frp/frp_status"
-t=a:section(NamedSection,"common","frp",translate("Global Setting"))
+a=Map(i,translate("frpc Setting"), translate("frpc is a fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet."))
+a:section(SimpleSection).template="frpc/frpc_status"
+t=a:section(NamedSection,"common","frpc",translate("Global Setting"))
 t.anonymous=true
 t.addremove=false
 t:tab("base",translate("Basic Settings"))
@@ -45,7 +45,7 @@ e.rmempty=false
 e=t:taboption("other",Flag, "tls_enable", translate("Use TLS Connection"), translate("if tls_enable is true, frpc will connect frps by tls."))
 e.default = "0"
 e.rmempty=false
-e=t:taboption("other",ListValue, "protocol", translate("Protocol Type"),translate("Frp support kcp protocol since v0.12.0"))
+e=t:taboption("other",ListValue, "protocol", translate("Protocol Type"),translate("frpc support kcp protocol since v0.12.0"))
 e.default = "tcp"
 e:value("tcp",translate("TCP Protocol"))
 e:value("kcp",translate("KCP Protocol"))
@@ -106,7 +106,7 @@ e.rows=26
 e.wrap="off"
 e.readonly=true
 e.cfgvalue=function(t,t)
-return s.readfile("/var/etc/frp/frpc.log")or""
+return s.readfile("/var/etc/frpc/frpc.log")or""
 end
 e.write=function(e,e,e)
 end
@@ -114,7 +114,7 @@ t=a:section(TypedSection,"proxy",translate("Services List"))
 t.anonymous=true
 t.addremove=true
 t.template="cbi/tblsection"
-t.extedit=o.build_url("admin","services","frp","config","%s")
+t.extedit=o.build_url("admin","services","frpc","config","%s")
 function t.create(e,t)
 new=TypedSection.create(e,t)
 luci.http.redirect(e.extedit:format(new))
@@ -122,12 +122,12 @@ end
 function t.remove(e,t)
 e.map.proceed=true
 e.map:del(t)
-luci.http.redirect(o.build_url("admin","services","frp"))
+luci.http.redirect(o.build_url("admin","services","frpc"))
 end
 local o=""
 e=t:option(DummyValue,"remark",translate("Service Remark Name"))
 e.width="10%"
-e=t:option(DummyValue,"type",translate("Frp Protocol Type"))
+e=t:option(DummyValue,"type",translate("frpc Protocol Type"))
 e.width="10%"
 e=t:option(DummyValue,"custom_domains",translate("Domain/Subdomain"))
 e.width="20%"

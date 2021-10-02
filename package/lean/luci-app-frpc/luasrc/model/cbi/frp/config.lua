@@ -1,12 +1,12 @@
-local n="frp"
+local n="frpc"
 local i=require"luci.dispatcher"
 local o=require"luci.model.network".init()
 local m=require"nixio.fs"
 local a,t,e
 arg[1]=arg[1]or""
-a=Map(n,translate("Frp Domain Config"))
-a.redirect=i.build_url("admin","services","frp")
-t=a:section(NamedSection,arg[1],"frp",translate("Config Frp Protocol"))
+a=Map(n,translate("frpc Domain Config"))
+a.redirect=i.build_url("admin","services","frpc")
+t=a:section(NamedSection,arg[1],"frpc",translate("Config frpc Protocol"))
 t.addremove=false
 t.dynamic=false
 t:tab("base",translate("Basic Settings"))
@@ -16,7 +16,7 @@ e.default="1"
 e.rmempty=false
 e:value("1",translate("Enable"))
 e:value("0",translate("Disable"))
-e=t:taboption("base",ListValue, "type", translate("Frp Protocol Type"))
+e=t:taboption("base",ListValue, "type", translate("frpc Protocol Type"))
 e:value("http",translate("HTTP"))
 e:value("https",translate("HTTPS"))
 e:value("tcp",translate("TCP"))
@@ -68,7 +68,7 @@ e:depends("type","stcp")
 e = t:taboption("base",Value, "stcp_servername", translate("STCP Server Name"), translate("STCP Server Name is Service Remark Name of STCP Server"))
 e.default = "secret_tcp"
 e:depends("stcp_role","visitor")
-e = t:taboption("other",Flag, "enable_locations", translate("Enable URL routing"), translate("Frp support forward http requests to different backward web services by url routing."))
+e = t:taboption("other",Flag, "enable_locations", translate("Enable URL routing"), translate("frpc support forward http requests to different backward web services by url routing."))
 e:depends("type","http")
 e = t:taboption("other",Value, "locations ", translate("URL routing"), translate("Http requests with url prefix /news will be forwarded to this service."))
 e.default="locations=/"
@@ -94,12 +94,12 @@ e = t:taboption("other",Flag, "enable_http_auth", translate("Password protecting
 e.default = "0"
 e:depends("type","http")
 e = t:taboption("other",Value, "http_user", translate("HTTP UserName"))
-e.default = "frp"
+e.default = "frpc"
 e:depends("enable_http_auth",1)
 e = t:taboption("other",Value, "http_pwd", translate("HTTP PassWord"))
-e.default = "frp"
+e.default = "frpc"
 e:depends("enable_http_auth",1)
-e = t:taboption("other",Flag, "enable_host_header_rewrite", translate("Rewriting the Host Header"), translate("Frp can rewrite http requests with a modified Host header."))
+e = t:taboption("other",Flag, "enable_host_header_rewrite", translate("Rewriting the Host Header"), translate("frpc can rewrite http requests with a modified Host header."))
 e.default = "0"
 e:depends("type","http")
 e = t:taboption("other",Value, "host_header_rewrite", translate("Host Header"), translate("The Host header will be rewritten to match the hostname portion of the forwarding address."))
@@ -124,7 +124,7 @@ e=t:taboption("other",Value,"plugin_host_header_rewrite",translate("plugin_host_
 e.default="127.0.0.1"
 e:depends("https_plugin","https2http")
 e=t:taboption("other",Value,"plugin_header_X_From_Where",translate("plugin_header_X-From-Where"))
-e.default="frp"
+e.default="frpc"
 e:depends("https_plugin","https2http")
 e = t:taboption("base",ListValue, "proxy_protocol_version", translate("Proxy-Protocol Version"), translate("Proxy Protocol to send user's real IP to local services."))
 e.default = "disable"

@@ -1,9 +1,9 @@
 #!/bin/sh
 
 uci -q batch <<-EOF >/dev/null
-	delete ucitrack.@frp[-1]
-	add ucitrack frp
-	set ucitrack.@frp[-1].init=frp
+	delete ucitrack.@frpc[-1]
+	add ucitrack frpc
+	set ucitrack.@frpc[-1].init=frpc
 	commit ucitrack
 EOF
 

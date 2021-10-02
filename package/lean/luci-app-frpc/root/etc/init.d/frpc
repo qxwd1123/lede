@@ -115,12 +115,12 @@ conf_proxy_add() {
 	[ -n "$plugin_host_header_rewrite" ] && echo "plugin_host_header_rewrite=$plugin_host_header_rewrite" >>$tmpconf
 	[ -n "$plugin_header_X_From_Where" ] && echo "plugin_header_X_From_Where=$plugin_header_X_From_Where" >>$tmpconf	
 
-	frp_write_bool use_encryption $cfg 1
-	frp_write_bool use_compression $cfg 1
+	frpc_write_bool use_encryption $cfg 1
+	frpc_write_bool use_compression $cfg 1
 
 }
 
-frp_write_bool() {
+frpc_write_bool() {
 	local opt="$1"
 	local config="$2"
 	local def="$3"
@@ -134,18 +134,18 @@ frp_write_bool() {
 	fi
 }
 
-frp_add_cru(){
+frpc_add_cru(){
 time=$1
-if [ ! -f "/etc/crontabs/root" ] || [ -z "$(cat /etc/crontabs/root | grep frp)" ]; then
-  sed -i '/frp/d' /etc/crontabs/root >/dev/null 2>&1
-  echo "*/$time * * * * /etc/init.d/frp restart" >> /etc/crontabs/root 
+if [ ! -f "/etc/crontabs/root" ] || [ -z "$(cat /etc/crontabs/root | grep frpc)" ]; then
+  sed -i '/frpc/d' /etc/crontabs/root >/dev/null 2>&1
+  echo "*/$time * * * * /etc/init.d/frpc restart" >> /etc/crontabs/root 
 fi
 
 }
 
-frp_del_cru(){
-if [ ! -f "/etc/crontabs/root" ] || [ -n "$(cat /etc/crontabs/root | grep frp)" ]; then
-  sed -i '/frp/d' /etc/crontabs/root >/dev/null 2>&1
+frpc_del_cru(){
+if [ ! -f "/etc/crontabs/root" ] || [ -n "$(cat /etc/crontabs/root | grep frpc)" ]; then
+  sed -i '/frpc/d' /etc/crontabs/root >/dev/null 2>&1
 fi
 }
 
@@ -170,7 +170,7 @@ boot() {
 
 start() {
 
-	config_load "frp"
+	config_load "frpc"
 	local enabled server_addr server_port time privilege_token user tcp_mux enable_cpool tls_enable
 	local pool_count log_level log_max_days login_fail_exit http_proxy protocol admin_port admin_user admin_pwd
 
@@ -194,11 +194,11 @@ start() {
 	config_get admin_pwd common admin_pwd
 
 
-	mkdir -p /var/etc/frp
+	mkdir -p /var/etc/frpc
 	[ ! -f "$LOGFILE" ] && touch $LOGFILE
 	
 	[ ! -f "/usr/bin/frpc" ] && download_binary
-	[ ! -f "/usr/bin/frpc" ] && logger -t Frp 'Download frpc failed, please retry.' && exit 0
+	[ ! -f "/usr/bin/frpc" ] && logger -t Frpc 'Download frpc failed, please retry.' && exit 0
 	
 	local tmpconf="/var/etc/frp/frpc.conf"
 
@@ -218,27 +218,27 @@ start() {
 	[ -n "$admin_pwd" ] && echo "admin_pwd=$admin_pwd" >>$tmpconf
 
 
-	config_load "frp"
-	frp_write_bool tcp_mux common 1
-	frp_write_bool tls_enable common 0
-	frp_write_bool login_fail_exit common 1
+	config_load "frpc"
+	frpc_write_bool tcp_mux common 1
+	frpc_write_bool tls_enable common 0
+	frpc_write_bool login_fail_exit common 1
 	config_foreach conf_proxy_add proxy "$tmpconf"
 
-	[ "$(cat "$tmpconf" | grep -c "type=")" -gt 0 ] || (echo_date "frp服务启动失败，请首先添加服务列表！" && exit 0)
-	logger -t FRPC 'Starting frp service'
+	[ "$(cat "$tmpconf" | grep -c "type=")" -gt 0 ] || (echo_date "frpc服务启动失败，请首先添加服务列表！" && exit 0)
+	logger -t FRPC 'Starting frpc service'
 	SERVICE_DAEMONIZE=1 \
 		service_start /usr/bin/frpc -c $tmpconf
 
-	[ "$time" -gt 0 ] && frp_add_cru $time
-	[ -z "$(pgrep /usr/bin/frpc)" ] && echo_date "frp服务启动失败，请检查服务端 “TCP多路复用(tcp_mux)”设置，确保与客户端完全一致！"
+	[ "$time" -gt 0 ] && frpc_add_cru $time
+	[ -z "$(pgrep /usr/bin/frpc)" ] && echo_date "frpc服务启动失败，请检查服务端 “TCP多路复用(tcp_mux)”设置，确保与客户端完全一致！"
 
 	return 0
 }
 
 stop() {
-	frp_del_cru
-	if [ -n "`pidof frpc`" ]; then
-		logger -t FRPC 'Shutting down frp service'
+	frpc_del_cru
+	if [ -n "`pidof frpcc`" ]; then
+		logger -t FRPC 'Shutting down frpc service'
 		service_stop /usr/bin/frpc
 		Reduce_Log $LOGFILE
 	fi
