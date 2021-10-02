@@ -1,5 +1,4 @@
 #!/bin/env sh
-cd /home/a/op
 until git pull --no-edit; do
     sleep 5
 done
