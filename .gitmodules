@@ -37,3 +37,5 @@
 [submodule "package/sub/luci-app-aliddns"]
 	path = package/sub/luci-app-aliddns
 	url = https://github.com/honwen/luci-app-aliddns
+[submodule "package.sub.luci-app-clash"]
+	ignore = untracked
