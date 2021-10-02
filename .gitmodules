@@ -34,3 +34,6 @@
 	path = package/sub/luci-lib-docker
 	url = https://github.com/lisaac/luci-lib-docker
 	branch = master
+[submodule "package/sub/luci-app-aliddns"]
+	path = package/sub/luci-app-aliddns
+	url = https://github.com/honwen/luci-app-aliddns
