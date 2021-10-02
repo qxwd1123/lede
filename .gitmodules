@@ -10,10 +10,6 @@
 	path = package/sub/luci-app-serverchan
 	url = https://github.com/tty228/luci-app-serverchan
 	branch = master
-[submodule "package/sub/luci-app-clash"]
-	path = package/sub/luci-app-clash
-	url = https://github.com/frainzy1477/luci-app-clash
-	branch = test
 [submodule "package/sub/luci-app-poweroff"]
 	path = package/sub/luci-app-poweroff
 	url = https://github.com/esirplayground/luci-app-poweroff
