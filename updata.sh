@@ -2,9 +2,9 @@
 until git pull --no-edit; do
     sleep 5
 done
-#until git submodule foreach git pull; do
-#    sleep 5
-#done
+until for d in $(find ./feeds -maxdepth 1 -mindepth 1 -type d ! -name '*tmp'); do pushd $d; git pull --no-edit --rebase=true; popd; done; do
+    sleep 5
+done
 until ./scripts/feeds update -a; do
     sleep 5
 done
