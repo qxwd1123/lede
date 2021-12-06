@@ -31,3 +31,5 @@ git submodule sync;
 # didn't like that, so now I do this...
 
 git submodule foreach --recursive 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo master)';
+
+svn checkout https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/my/luci-app-openclash
